@@ -2,5 +2,5 @@
 
 set -xe
 
-gcc calculator.c -o coolculator.exe
+gcc calculator.c -o coolculator.exe --Wextra --Wall --pedantic
 ./coolculator
