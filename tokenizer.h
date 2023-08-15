@@ -24,5 +24,4 @@ typedef struct Lexer {
     char *current;
 } Lexer;
 
-Token lexer_make_token(Lexer *lexer, TokenType type);
 Token lexer_next_token(Lexer *lexer);

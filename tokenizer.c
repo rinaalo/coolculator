@@ -2,6 +2,16 @@
 #include "defines.h"
 #include "tokenizer.h"
 
+Token lexer_make_token(Lexer *lexer, TokenType type) {
+    return(Token) {
+        .type = type,
+        .lexeme = (string) {
+            .str = lexer->start,
+            .size = (u32) (lexer->current - lexer->start)
+        },
+    };
+}
+
 Token lexer_number(Lexer *lexer) {
     while (isdigit(*lexer->current)) lexer->current++;
     if (*lexer->current == '.') {
@@ -15,16 +25,6 @@ Token lexer_ident(Lexer *lexer) {
     if (isalpha(*lexer->current) || *lexer->current == '_') lexer->current++;
     while (isalnum(*lexer->current) || *lexer->current == '_') lexer->current++;
     return lexer_make_token(lexer, TokenType_Ident);
-}
-
-Token lexer_make_token(Lexer *lexer, TokenType type) {
-    return(Token) {
-        .type = type,
-        .lexeme = (string) {
-            .str = lexer->start,
-            .size = (u32) (lexer->current - lexer->start)
-        },
-    };
 }
 
 Token lexer_next_token(Lexer *lexer) {
