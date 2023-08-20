@@ -1,6 +1,6 @@
 #include <ctype.h>
 #include "defines.h"
-#include "tokenizer.h"
+#include "lexer.h"
 
 Token lexer_make_token(Lexer *lexer, TokenType type) {
     return(Token) {
@@ -28,23 +28,27 @@ Token lexer_ident(Lexer *lexer) {
 }
 
 Token lexer_next_token(Lexer *lexer) {
-    while (isspace(*lexer->start)) lexer->start += 1;
-    lexer->current = lexer->start;
+    while (isspace(*lexer->current)) lexer->current ++;
+    lexer->start = lexer->current;
     if (*lexer->current == '\0')
         return lexer_make_token(lexer, TokenType_EOF);
+    char c = *lexer->current;
     lexer->current++;
-    switch(*lexer->current) {
-        case '+': lexer->current++; return lexer_make_token(lexer, TokenType_Plus);
-        case '-': lexer->current++; return lexer_make_token(lexer, TokenType_Minus);
-        case '*': lexer->current++; return lexer_make_token(lexer, TokenType_Star);
-        case '/': lexer->current++; return lexer_make_token(lexer, TokenType_Slash);
-        case '^': lexer->current++; return lexer_make_token(lexer, TokenType_Caret);
+    switch(c) {
+        case '(': return lexer_make_token(lexer, TokenType_OpenParen);
+        case ')': return lexer_make_token(lexer, TokenType_CloseParen);
+        
+        case '+': return lexer_make_token(lexer, TokenType_Plus);
+        case '-': return lexer_make_token(lexer, TokenType_Minus);
+        case '*': return lexer_make_token(lexer, TokenType_Star);
+        case '/': return lexer_make_token(lexer, TokenType_Slash);
+        case '^': return lexer_make_token(lexer, TokenType_Caret);
 
         case '0': case '1': case '2': case '3': case '4':
         case '5': case '6': case '7': case '8': case '9': return lexer_number(lexer);
 
         default: {
-            if (isalpha(*lexer->current)) return lexer_ident(lexer);
+            if (isalpha(c)) return lexer_ident(lexer);
             return lexer_make_token(lexer, TokenType_Error);
         }
     }
