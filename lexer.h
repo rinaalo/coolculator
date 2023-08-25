@@ -9,8 +9,9 @@ typedef enum {
     TokenType_Plus, TokenType_Minus,
     TokenType_Star, TokenType_Slash,
     TokenType_Caret,
-    TokenType_OpenParen,
-    TokenType_CloseParen,
+    TokenType_OpenParen, TokenType_CloseParen,
+
+    TokenType_MAX,
 } TokenType;
 
 typedef struct Token {

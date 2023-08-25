@@ -10,23 +10,15 @@
 
 int main() {
     char input[ARRAY_LEN];
+    f64 result;
     
+    Parser parser = { 0 };
     while (true) {
         fgets(input, ARRAY_LEN, stdin);
         printf("Inputted string \"%s\"\n", input);
-
-        Lexer lexer = {input, input};
-
-        Token token;
-        int j = 0;
-        do {
-            if (j++ > 50) break;
-            token = lexer_next_token(&lexer);
-            printf("Type: %i Lexeme ", token.type);
-            for (size_t i = 0; i < token.lexeme.size; i++) fputc(token.lexeme.str[i], stdout);
-            printf("\n");
-            
-        } while (token.type != TokenType_EOF && token.type != TokenType_Error);
+        parser_set_expression(&parser, input);
+        result = evaluate(parser_parse_expression(&parser, Precedence_Min));
+        printf("Result: %lf\n", result);
     }
     return 0;
 }
