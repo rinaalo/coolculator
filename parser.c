@@ -17,7 +17,7 @@ static Precedence precedence_lookup[TokenType_MAX] = {
   [TokenType_Caret] = Precedence_Exponential,
 };
 
-#define parser_advance(parser)\ 
+#define parser_advance(parser) \
     parser->curr = lexer_next_token(&parser->lexer)
 
 Expression_Node *alloc_node() {
