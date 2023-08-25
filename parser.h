@@ -22,3 +22,8 @@ typedef struct Expression_Node {
         struct { Expression_Node *left; Expression_Node *right; } binary;
     };
 } Expression_Node;
+
+typedef struct Parser {
+    Lexer lexer;
+    Token curr;
+} Parser;
