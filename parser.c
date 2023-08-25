@@ -51,6 +51,9 @@ f64 evaluate(Expression_Node *node) {
             return evaluate(node->binary.left) / evaluate(node->binary.right);
         case NodeType_Pow:
             return pow(evaluate(node->binary.left), evaluate(node->binary.right));
+        default:
+            fprintf(stderr, "Unknown Node Type encountered\n");
+            exit(-1);
     }
 }
 
@@ -88,7 +91,7 @@ Expression_Node *parser_parse_terminal_expression(Parser *parser) {
     } else {
         return error_node();
     }
-    
+    return ret;
 }
 
 
