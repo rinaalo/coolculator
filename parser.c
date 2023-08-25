@@ -3,10 +3,10 @@
 #include <stdio.h>
 
 #define parser_advance(parser)\ 
-    parser->curr = lexer_next_token(parser->lexer)
+    parser->curr = lexer_next_token(&parser->lexer)
 
 Expression_Node *alloc_node() {
-    return malloc(sizeof(Expression_Node));
+    return COOL_ALLOC(sizeof(Expression_Node));
 }
 
 f64 evaluate(Expression_Node *node) {

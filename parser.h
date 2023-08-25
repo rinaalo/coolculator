@@ -1,6 +1,7 @@
 #pragma once
 
 #include "defines.h"
+#include "lexer.h"
 
 typedef enum {
     NodeType_Error,

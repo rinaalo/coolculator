@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "lexer.h"
 #include "parser.h"
@@ -10,7 +11,7 @@
 int main() {
     char input[ARRAY_LEN];
     
-    while (1) {
+    while (true) {
         fgets(input, ARRAY_LEN, stdin);
         printf("Inputted string \"%s\"\n", input);
 
