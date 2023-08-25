@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 typedef uint32_t u32;
+typedef double f64;
 
 typedef struct string {
     char *str;

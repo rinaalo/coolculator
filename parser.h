@@ -1,5 +1,7 @@
 #pragma once
 
+#include "defines.h"
+
 typedef enum {
     NodeType_Error,
     NodeType_Number,
@@ -15,8 +17,8 @@ typedef enum {
 typedef struct Expression_Node {
     Expression_Node_Type type;
     union {
-        double number;
+        f64 number;
         struct { Expression_Node *operand; } unary;
         struct { Expression_Node *left; Expression_Node *right; } binary;
-    } Expression_Node;
+    };
 } Expression_Node;
