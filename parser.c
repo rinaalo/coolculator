@@ -58,7 +58,7 @@ f64 evaluate(Expression_Node *node) {
 }
 
 f64 number_from_string(string str) {
-    return strtod(str.str, str.str + str.size);
+    return strtod(str.str, NULL);
 }
 
 Expression_Node *parser_parse_number(Parser *parser) {
@@ -95,7 +95,7 @@ Expression_Node *parser_parse_terminal_expression(Parser *parser) {
 }
 
 
-Expression_Node * parser_parse_infix_expression(Parser *parser, Token operator, Expression_Node *left) {
+Expression_Node *parser_parse_infix_expression(Parser *parser, Token operator, Expression_Node *left) {
     Expression_Node *ret = alloc_node();
     switch (operator.type) {
         case TokenType_Plus:    ret->type = NodeType_Add; break;
@@ -103,6 +103,9 @@ Expression_Node * parser_parse_infix_expression(Parser *parser, Token operator, 
         case TokenType_Star:    ret->type = NodeType_Mul; break;
         case TokenType_Slash:   ret->type = NodeType_Div; break;
         case TokenType_Caret:   ret->type = NodeType_Pow; break;
+        default:
+            fprintf(stderr, "Illegal Tokentype encountered while handling binary expression\n");
+            exit(-1);
     }
     ret->binary.left = left;
     ret->binary.right = parser_parse_expression(parser, precedence_lookup[operator.type]);
