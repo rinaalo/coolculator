@@ -18,7 +18,23 @@ static Precedence precedence_lookup[TokenType_MAX] = {
 };
 
 #define parser_advance(parser) \
-    parser->curr = lexer_next_token(&parser->lexer)
+    parser->curr = lexer_next_token(&parser->lexer); \
+    printf("Just lexed token of type: %i\n", parser->curr.type)
+
+void parser_free_expression(Expression_Node *node) {
+    switch (node->type) {
+    case NodeType_Error: case NodeType_Number:
+        break;
+    case NodeType_Positive: case NodeType_Negative:
+        parser_free_expression(node->unary.operand);
+        break;
+    case NodeType_Add: case NodeType_Sub: case NodeType_Mul: case NodeType_Div: case NodeType_Pow:
+        parser_free_expression(node->binary.left);
+        parser_free_expression(node->binary.right);
+        break;
+    }
+    free(node);
+}
 
 Expression_Node *alloc_node() {
     return COOL_ALLOC(sizeof(Expression_Node));
@@ -77,7 +93,9 @@ Expression_Node *parser_parse_terminal_expression(Parser *parser) {
     } else if (curr_type == TokenType_OpenParen) {
         parser_advance(parser);
         ret = parser_parse_expression(parser, Precedence_Min);
-        if (parser->curr.type == TokenType_CloseParen) parser_advance(parser);
+        if (parser->curr.type == TokenType_CloseParen) {
+            parser_advance(parser);
+        }
     } else if (curr_type == TokenType_Plus) {
         parser_advance(parser);
         ret = alloc_node();
@@ -89,6 +107,8 @@ Expression_Node *parser_parse_terminal_expression(Parser *parser) {
         ret->type = NodeType_Negative;
         ret->unary.operand = parser_parse_terminal_expression(parser);
     } else {
+        printf("Illegal Token type ecountered: %i\n", curr_type);
+        exit(-1);
         return error_node();
     }
     return ret;
@@ -118,7 +138,7 @@ Expression_Node *parser_parse_expression(Parser *parser, Precedence prev_precede
     Precedence curr_precedence = precedence_lookup[curr_operator.type];
 
     while (curr_precedence != Precedence_Min) {
-        if (prev_precedence >= curr_precedence) {   // Higher in tree
+        if (prev_precedence >= curr_precedence) {   // Lower in tree
             break;
         } else {                                    // Higher in tree
             parser_advance(parser);

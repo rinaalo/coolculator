@@ -39,3 +39,4 @@ typedef struct Parser {
 void parser_set_expression(Parser *parser, char *expression);
 Expression_Node *parser_parse_expression(Parser *parser, Precedence prev_precedence);
 f64 evaluate(Expression_Node *node);
+void parser_free_expression(Expression_Node *node);
